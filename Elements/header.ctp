@@ -6,17 +6,14 @@
           </a>
           <a class="brand" href="/"><?php echo Configure::read('Site.title'); ?></a>
           <div class="nav-collapse">
-          	<?php
-          		echo $this->Layout->menu('main', array('dropdown'=>true, 'dropdownClass'=>'nav'));
-          	?>
+          	<?php echo $this->Layout->menu('main', array('dropdown'=>true, 'dropdownClass'=>'nav'));?>
 
           	 <div class="navbar-text pull-right remove-lineheight">
 				<form id="searchform" method="post" class="form-search remove-margins search-box" action="javascript: document.location.href=''+Croogo.basePath+'search/q:'+encodeURI($('#searchform #q').val());">
 					<div class="control-group remove-margins">
 						<div class="controls">
 							<div class="input-append">
-								<input class="span2" name="q" id="iconInput" type="text" />
-								<span class="add-on" onclick="jQuery('#searchform').submit();"><i class="icon-search"></i></span>
+								<input class="span2" name="q" id="iconInput" type="text" /><span class="add-on" onclick="jQuery('#searchform').submit();"><i class="icon-search"></i></span>
 							</div>
 						</div>
 					</div>
