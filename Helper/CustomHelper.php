@@ -1,18 +1,31 @@
 <?php
-
-class CustomHelper extends Helper {
+/**
+ * Custom Helper
+ *
+ * For custom theme specific methods.
+ *
+ * @category Helper
+ * @package  Bootstrap
+ */
+class CustomHelper extends AppHelper {
 	public $helpers = array(
 		'Html',
 		'Layout',
 	);
-	//Have to subvert the default Croogo menuing to work with bootstrap
-	public function nestedLinks( $links, $options = array( ), $depth = 1 ) {
+
+/**
+ * Have to subvert the default Croogo menuing to work with bootstrap
+ *
+ * @access public
+ * @return string
+ */
+	public function nestedLinks($links, $options = array(), $depth = 1) {
 
 		$_options = array();
 		$options = array_merge($_options, $options);
 
 		$output = '';
-		foreach ($links AS $link) {
+		foreach ($links as $link) {
 			$linkAttr = array(
 				'id' => 'link-' . $link['Link']['id'],
 				'rel' => $link['Link']['rel'],
@@ -21,7 +34,7 @@ class CustomHelper extends Helper {
 				'class' => $link['Link']['class'],
 			);
 
-			foreach ($linkAttr AS $attrKey => $attrValue) {
+			foreach ($linkAttr as $attrKey => $attrValue) {
 				if ($attrValue == null) {
 					unset($linkAttr[$attrKey]);
 				}
@@ -39,36 +52,37 @@ class CustomHelper extends Helper {
 				$currentUrl = $this->_View->request->url;
 			}
 
-			if( Router::url( $link[ 'Link' ][ 'link' ] ) == Router::url( '/' . $currentUrl ) ) {
-				if( !isset( $linkAttr[ 'class' ] ) ) {
-					$linkAttr[ 'class' ] = '';
+			if (Router::url($link['Link']['link']) == Router::url('/' . $currentUrl)) {
+				if (!isset($linkAttr['class'])) {
+					$linkAttr['class'] = '';
 				}
-				$linkAttr[ 'class' ] .= ' ' . $options[ 'selected' ];
+				$linkAttr['class'] .= ' ' . $options['selected'];
 			}
-			$linkAttr[ 'escape' ] = false;
+			$linkAttr['escape'] = false;
 
 			$parentTag = '';
-			if( isset( $link[ 'children' ] ) && count( $link[ 'children' ] ) > 0 ) {
-				$linkAttr[ 'class' ] .= ' dropdown-toggle';
-				$linkAttr[ 'data-toggle' ] = 'dropdown';
-				$linkOutput = $this->Html->link( $link[ 'Link' ][ 'title' ] . ' <b class="caret"></b>', $link[ 'Link' ][ 'link' ], $linkAttr );
-				$linkOutput .= $this->nestedLinks( $link[ 'children' ], $options, $depth + 1, $layout, $html );
+			if (isset($link['children']) && count($link['children']) > 0) {
+				$linkAttr['class'] .= ' dropdown-toggle';
+				$linkAttr['data-toggle'] = 'dropdown';
+				$linkOutput = $this->Html->link($link['Link']['title'] . ' <b class="caret"></b>', $link['Link']['link'], $linkAttr);
+				$linkOutput .= $this->nestedLinks($link['children'], $options, $depth + 1, $layout, $html);
 				$parentTag = 'dropdown';
 			} else {
-				$linkOutput = $this->Html->link( $link[ 'Link' ][ 'title' ], $link[ 'Link' ][ 'link' ], $linkAttr );
+				$linkOutput = $this->Html->link($link['Link']['title'], $link['Link']['link'], $linkAttr);
 			}
-			$linkOutput = $this->Html->tag( 'li', $linkOutput, array( 'class' => $parentTag ) );
+			$linkOutput = $this->Html->tag('li', $linkOutput, array('class' => $parentTag));
 			$output .= $linkOutput;
 		}
-		if( $output != null ) {
-			$tagAttr = $options[ 'tagAttributes' ];
-			if( $options[ 'dropdown' ] && $depth == 1 ) {
-				$tagAttr[ 'class' ] = $options[ 'dropdownClass' ];
+
+		if ($output != null) {
+			$tagAttr = $options['tagAttributes'];
+			if ($options['dropdown'] && $depth == 1) {
+				$tagAttr['class'] = $options['dropdownClass'];
 			}
-			if( $options[ 'dropdown' ] && $depth > 1 ) {
-				$tagAttr[ 'class' ] = " dropdown-menu";
+			if ($options['dropdown'] && $depth > 1) {
+				$tagAttr['class'] = " dropdown-menu";
 			}
-			$output = $this->Html->tag( $options[ 'tag' ], $output, $tagAttr );
+			$output = $this->Html->tag($options['tag'], $output, $tagAttr);
 		}
 
 		return $output;
